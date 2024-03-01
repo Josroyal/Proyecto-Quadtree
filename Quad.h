@@ -4,6 +4,7 @@
 #include <queue>
 #include <map>
 #include <set>
+#include <cmath>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 using namespace std;
@@ -72,6 +73,8 @@ public:
     void draw(sf::RenderWindow& window, vector<Point*>& rangePoints, double tx, double ty, double bx, double by); // Draw for range search
     void draw(sf::RenderWindow& window, const vector<Point*>& nearestPoints, double refX, double refY); // Draw for k nearest
     void draw(sf::RenderWindow& window); // Draw for insert
+
+    void printTree();
 
 
 };
@@ -585,3 +588,67 @@ void QuadTree::draw(sf::RenderWindow& window, const vector<Point*>& nearestPoint
     if (SE != nullptr) SE->draw(window, nearestPoints, refX, refY);
 }
 
+void QuadTree::printTree(){
+    vector<vector<char>> grid;
+    queue<QuadTree*> bfsQ;
+
+    vector<char> temp(botRight->y, ' ');
+
+    for (int i = 0; i < botRight->x; i++){
+        grid.push_back(temp);
+    }
+
+    bfsQ.push(this);
+
+    while (!bfsQ.empty()){
+        QuadTree* current = bfsQ.front();
+        bfsQ.pop();
+        if (current->n != nullptr){
+            grid[current->n->x-1][current->n->y-1] = 'O';
+        } else {
+            bool isLeaf = true;
+
+            if (current->NW != nullptr){
+                bfsQ.push(current->NW);
+                isLeaf = false;
+            }
+
+            if (current->NE != nullptr){
+                bfsQ.push(current->NE);
+                isLeaf = false;
+            }
+
+            if (current->SE != nullptr){
+                bfsQ.push(current->SE);
+                isLeaf = false;
+            }
+
+            if (current->SW != nullptr){
+                bfsQ.push(current->SW);
+                isLeaf = false;
+            }
+
+            if (!isLeaf){
+                int midX = (current->botRight->x + current->topLeft->x) / 2;
+                int midY = (current->botRight->y + current->topLeft->y) / 2;
+
+                for (int i = current->topLeft->x; i < current->botRight->x; i++){
+                    grid[i][midY] = '|';
+                }
+
+                for (int i = current->topLeft->y; i < current->botRight->y; i++){
+                    grid[midX][i] = '-';
+                }
+
+                grid[midX][midY] = '+';
+            }
+        }
+    }
+
+    for (auto row : grid){
+        for (auto dot : row){
+            cout << dot << " ";
+        }
+        cout << endl;
+    }
+}

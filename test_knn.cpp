@@ -3,10 +3,10 @@
 // Test For knearest
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(1200, 1200), "K Nearest Neighbors Visualization");
+    sf::RenderWindow window(sf::VideoMode(800, 800), "K Nearest Neighbors Visualization");
 
     // Create a QuadTree that covers the window area
-    QuadTree quadTree(1200,1200);
+    QuadTree quadTree(800, 800);
 
     // Manually insert points into the QuadTree
 

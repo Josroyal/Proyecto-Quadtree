@@ -5,10 +5,10 @@
 
 int main() {
     // Create an SFML window
-    sf::RenderWindow window(sf::VideoMode(1200, 1200), "QuadTree Visualization");
+    sf::RenderWindow window(sf::VideoMode(800, 800), "QuadTree Visualization");
 
     // Create a QuadTree that covers the window area
-    QuadTree quadTree(1200, 1200);
+    QuadTree quadTree(800, 800);
 
     // Main loop
     while (window.isOpen()) {
